@@ -1,5 +1,5 @@
 ---
-# Pizza Bank source docs for Pattern3 (AutoRAG best) LS-compatible ingest.
+# Pizza Bank source docs for AutoRAG best-pattern LS-compatible ingest.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -33,7 +33,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pattern3-ingest-script
+  name: best-pattern-ingest-script
   namespace: llamastack
   labels:
     app.kubernetes.io/part-of: autorag-demo
@@ -41,7 +41,7 @@ metadata:
 data:
   ingest.py: |
     #!/usr/bin/env python3
-    """Create/reuse pizza-bank-pattern3 with AutoRAG Pattern3 chunking via LS files API."""
+    """Create/reuse pizza-bank-best-pattern with AutoRAG best pattern chunking via LS files API."""
     import json
     import os
     import sys
@@ -53,7 +53,7 @@ data:
         "LS_URL",
         "http://llamastack-custom-distribution-service.llamastack.svc.cluster.local:8321/v1",
     ).rstrip("/")
-    STORE_NAME = os.environ.get("STORE_NAME", "pizza-bank-pattern3")
+    STORE_NAME = os.environ.get("STORE_NAME", "pizza-bank-best-pattern")
     EMBEDDING_MODEL = os.environ.get(
         "EMBEDDING_MODEL", "sentence-transformers/nomic-ai/nomic-embed-text-v1.5"
     )
@@ -84,7 +84,7 @@ data:
 
 
     def multipart_file(path: Path, purpose: str = "assistants"):
-        boundary = "----Pattern3Boundary7MA4YWxkTrZu0gW"
+        boundary = "----BestPatternBoundary7MA4YWxkTrZu0gW"
         filename = path.name
         content = path.read_bytes()
         parts = []
@@ -131,7 +131,7 @@ data:
                     "embedding_dimension": EMBEDDING_DIM,
                     "provider_id": "milvus-remote",
                     "metadata": {
-                        "autorag_pattern": "Pattern3",
+                        "autorag_pattern": "best",
                         "chunk_size": str(CHUNK_SIZE),
                         "chunk_overlap": str(CHUNK_OVERLAP),
                     },
@@ -183,15 +183,15 @@ data:
             sys.exit(1)
 ---
 # Apply after Llama Stack is Ready (step 6 in the workshop):
-#   oc apply -f 6-rag/pattern3-ingest.yaml
-#   oc delete job pattern3-rag-ingest -n llamastack --ignore-not-found  # if re-running
-#   oc apply -f 6-rag/pattern3-ingest.yaml
-#   oc wait -n llamastack --for=condition=complete job/pattern3-rag-ingest --timeout=300s
-# Then deploy 8-app (VECTOR_STORE_ID=pizza-bank-pattern3).
+#   oc apply -f 6-rag/best-pattern-ingest.yaml
+#   oc delete job best-pattern-rag-ingest -n llamastack --ignore-not-found  # if re-running
+#   oc apply -f 6-rag/best-pattern-ingest.yaml
+#   oc wait -n llamastack --for=condition=complete job/best-pattern-rag-ingest --timeout=300s
+# Then deploy 8-app (VECTOR_STORE_ID=pizza-bank-best-pattern).
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pattern3-rag-ingest
+  name: best-pattern-rag-ingest
   namespace: llamastack
   labels:
     app.kubernetes.io/part-of: autorag-demo
@@ -215,7 +215,7 @@ spec:
             - name: LS_URL
               value: http://llamastack-custom-distribution-service.llamastack.svc.cluster.local:8321/v1
             - name: STORE_NAME
-              value: pizza-bank-pattern3
+              value: pizza-bank-best-pattern
             - name: EMBEDDING_MODEL
               value: sentence-transformers/nomic-ai/nomic-embed-text-v1.5
             - name: EMBEDDING_DIM
@@ -246,5 +246,5 @@ spec:
             name: pizza-bank-docs
         - name: scripts
           configMap:
-            name: pattern3-ingest-script
+            name: best-pattern-ingest-script
             defaultMode: 0755

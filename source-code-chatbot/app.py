@@ -17,7 +17,7 @@ API_KEY = (
     or os.getenv("LLAMA_STACK_API_KEY", "").strip()
 )
 DEFAULT_MODEL = os.getenv("INFERENCE_MODEL", "redhataiqwen3-8b-fp8-dynamic")
-DEFAULT_VECTOR_STORE = os.getenv("VECTOR_STORE_ID", "pizza-bank-pattern3")
+DEFAULT_VECTOR_STORE = os.getenv("VECTOR_STORE_ID", "pizza-bank-best-pattern")
 MCP_SERVER_LABEL = os.getenv("MCP_SERVER_LABEL", "openshift-mcp-server")
 MCP_SERVER_URL = os.getenv(
     "MCP_SERVER_URL",
@@ -31,7 +31,7 @@ MAX_OUTPUT_TOKENS = int(os.getenv("LLAMA_STACK_MAX_OUTPUT_TOKENS", "2048"))
 MCP_MAX_OUTPUT_TOKENS = int(os.getenv("LLAMA_STACK_MCP_MAX_OUTPUT_TOKENS", "1024"))
 MAX_RESPONSE_CONTINUATIONS = int(os.getenv("LLAMA_STACK_MAX_RESPONSE_CONTINUATIONS", "2"))
 RAG_MAX_RESULTS = int(os.getenv("LLAMA_STACK_RAG_MAX_RESULTS", "5"))
-# AutoRAG Pattern3 retrieval defaults (hybrid + weighted alpha 0.5)
+# AutoRAG best-pattern retrieval defaults (hybrid + weighted alpha 0.5)
 RAG_RANKER = os.getenv("LLAMA_STACK_RAG_RANKER", "weighted").strip()
 RAG_RANKER_ALPHA = float(os.getenv("LLAMA_STACK_RAG_RANKER_ALPHA", "0.5"))
 # Restrict MCP schemas so prompt+answer fit; override with comma-separated names.
@@ -459,7 +459,7 @@ with st.sidebar:
         if selected_store["completed_files"] < 1:
             st.error(
                 "This vector store has **0 indexed files**, so file_search will find "
-                "nothing. Pick `pizza-bank-production-v2` (or any store with files > 0), "
+                "nothing. Pick `pizza-bank-best-pattern` (or any store with files > 0), "
                 "then click **Apply Changes and Restart Chat**."
             )
 
